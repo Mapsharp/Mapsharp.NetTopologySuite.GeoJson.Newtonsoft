@@ -16,6 +16,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Mapsharp.GeoJson.Newtonsoft" Version="6.0.0" />
+		<PackageReference Include="NetTopologySuite" Version="2.5.0" />
 	</ItemGroup>
 
 </Project>

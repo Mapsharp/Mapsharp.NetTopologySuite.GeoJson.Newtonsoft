@@ -11,6 +11,7 @@ namespace Mapsharp.NetTopologySuite.GeoJson.Newtonsoft.Extensions
             settings.Converters.Add(CreatePointJsonConverter(factory));
             settings.Converters.Add(CreateMultiPointJsonConverter(factory));
             settings.Converters.Add(CreateLineStringJsonConverter(factory));
+            settings.Converters.Add(CreateMultiLineStringJsonConverter(factory));
 
             return settings;
         }
@@ -31,6 +32,12 @@ namespace Mapsharp.NetTopologySuite.GeoJson.Newtonsoft.Extensions
         {
             var lineStringConverter = new LineStringConverter(factory);
             return new TypeMappingJsonConverter<LineString, Mapsharp.GeoJson.Core.Geometries.LineString>(lineStringConverter, lineStringConverter);
+        }
+
+        private static TypeMappingJsonConverter<MultiLineString, Mapsharp.GeoJson.Core.Geometries.MultiLineString> CreateMultiLineStringJsonConverter(GeometryFactory factory)
+        {
+            var multiLineStringConverter = new MultiLineStringConverter(factory);
+            return new TypeMappingJsonConverter<MultiLineString, Mapsharp.GeoJson.Core.Geometries.MultiLineString>(multiLineStringConverter, multiLineStringConverter);
         }
     }
 }

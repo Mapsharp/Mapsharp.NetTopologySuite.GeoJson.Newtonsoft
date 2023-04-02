@@ -1,6 +1,7 @@
 ﻿using Mapsharp.NetTopologySuite.GeoJson.Newtonsoft.Converters;
 using NetTopologySuite.Geometries;
 using Newtonsoft.Json;
+using System.ComponentModel;
 
 namespace Mapsharp.NetTopologySuite.GeoJson.Newtonsoft.Extensions
 {
@@ -12,9 +13,18 @@ namespace Mapsharp.NetTopologySuite.GeoJson.Newtonsoft.Extensions
             settings.Converters.Add(CreateMultiPointJsonConverter(factory));
             settings.Converters.Add(CreateLineStringJsonConverter(factory));
             settings.Converters.Add(CreateMultiLineStringJsonConverter(factory));
+            settings.Converters.Add(CreatePolygonJsonConverter(factory));
+            settings.Converters.Add(CreateMultiPolygonJsonConverter(factory));
 
             return settings;
         }
+
+        private static TypeMappingJsonConverter<TType, TJsonType> CreateJsonConverter<TType, TJsonType, TConverterType>(TConverterType converter)
+            where TConverterType : ITypeConverter<TType, TJsonType>, ITypeConverter<TJsonType, TType>
+        {
+            return new TypeMappingJsonConverter<TType, TJsonType>(converter, converter);
+        }
+
 
         private static TypeMappingJsonConverter<Point, Mapsharp.GeoJson.Core.Geometries.Point> CreatePointJsonConverter(GeometryFactory factory)
         {
@@ -38,6 +48,18 @@ namespace Mapsharp.NetTopologySuite.GeoJson.Newtonsoft.Extensions
         {
             var multiLineStringConverter = new MultiLineStringConverter(factory);
             return new TypeMappingJsonConverter<MultiLineString, Mapsharp.GeoJson.Core.Geometries.MultiLineString>(multiLineStringConverter, multiLineStringConverter);
+        }
+
+        private static TypeMappingJsonConverter<Polygon, Mapsharp.GeoJson.Core.Geometries.Polygon> CreatePolygonJsonConverter(GeometryFactory factory)
+        {
+            var polygonConverter = new PolygonConverter(factory);
+            return new TypeMappingJsonConverter<Polygon, Mapsharp.GeoJson.Core.Geometries.Polygon>(polygonConverter, polygonConverter);
+        }
+
+        private static TypeMappingJsonConverter<MultiPolygon, Mapsharp.GeoJson.Core.Geometries.MultiPolygon> CreateMultiPolygonJsonConverter(GeometryFactory factory)
+        {
+            var multiPolygonConverter = new MultiPolygonConverter(factory);
+            return new TypeMappingJsonConverter<MultiPolygon, Mapsharp.GeoJson.Core.Geometries.MultiPolygon>(multiPolygonConverter, multiPolygonConverter);
         }
     }
 }
